@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}", // Active file (e.g., test.cpp)
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}", // Output executable
+                "-lraylib", // Link Raylib
+                "-lGL", // Link OpenGL
+                "-lm", // Link math library
+                "-lpthread", // Link pthread
+                "-ldl" // Link dynamic linking library
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Generated task by VS Code"
+        }
+    ]
+}
