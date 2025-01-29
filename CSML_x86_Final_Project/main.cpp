@@ -6,6 +6,8 @@ public:
     float x , y;
     float speed_x , speed_y;
     float radius;
+    Image image;
+    Texture2D texture;
 
     void SetBall(int x , int y , float speed_x , float speed_y , float radius){
         this->x = x;
@@ -13,10 +15,12 @@ public:
         this->speed_x = speed_x;
         this->speed_y = speed_y;
         this->radius = radius;
+
+        texture = LoadTexture("resources/ball.png"); // Convert image to texture
     }
 
     void Draw(){
-        DrawCircle(x , y , radius , ORANGE);
+        DrawTexture(texture, x, y, WHITE);
     }
 
     void Update(){
@@ -87,7 +91,7 @@ int main() {
     InitWindow(screen_width , screen_height , "My Pong Game");
     SetTargetFPS(target_fps);
 
-    ball.SetBall(screen_width / 2 , screen_height / 2 , 5 , 5 , 20);
+    ball.SetBall(screen_width / 2 , screen_height / 2 , 2 , 2 , 20);
     player.SetPaddle(10 , screen_height / 2 - 60 , 25 , 120 , 5);
     cpu.SetPaddle(screen_width - 35 , screen_height / 2 , 25 , 120 , 1);
 
