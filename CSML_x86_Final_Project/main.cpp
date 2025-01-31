@@ -2,11 +2,13 @@
 #include <iostream>
 #include "ball.h"
 #include "paddle.h"
+#include "score.h"
 
 
 Ball ball;
 Paddle player;
 CPUPaddle cpu;
+Score score;
 
 int main() {
     const int screen_width = 1280;
@@ -17,8 +19,8 @@ int main() {
     SetTargetFPS(target_fps);
 
     ball.SetBall(screen_width / 2 - 300 , screen_height / 2 , 0 , 0 , 20);
-    player.SetPaddle(10 , screen_height / 2 - 60 , 25 , 120 , 5);
-    cpu.SetPaddle(screen_width - 35 , screen_height / 2 , 25 , 120 , 1);
+    player.SetPaddle(30 , screen_height / 2 - 60 , 25 , 120 , 5);
+    cpu.SetPaddle(screen_width - 55 , screen_height / 2 , 25 , 120 , 1);
 
     while (!WindowShouldClose())
     {
@@ -28,6 +30,7 @@ int main() {
         ball.Update();
         player.Update();
         cpu.Update(ball.y);
+        score.Update(ball);
 
         //Check for collisions
         if(CheckCollisionCircleRec(Vector2{ball.x , ball.y} , ball.radius , Rectangle{player.x , player.y , player.width , player.height})){
@@ -42,6 +45,7 @@ int main() {
         ball.Draw();
         player.Draw();
         cpu.Draw();
+        score.Draw();
 
         EndDrawing();
     }

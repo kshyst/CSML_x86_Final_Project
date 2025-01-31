@@ -38,4 +38,8 @@ class CPUPaddle: public Paddle{
             y += speed;
         }
     }
+
+    void Draw(){
+        DrawRectangle(x , y , width , height , RED);
+    }
 };
