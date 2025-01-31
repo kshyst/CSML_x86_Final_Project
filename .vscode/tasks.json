@@ -11,6 +11,8 @@
                 "${file}", // Active file (e.g., test.cpp)
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}", // Output executable
+                "-I",
+                ".",
                 "-lraylib", // Link Raylib
                 "-lGL", // Link OpenGL
                 "-lm", // Link math library
