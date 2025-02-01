@@ -8,11 +8,11 @@ public:
     int opponentScore = 0;
 
     void Update(Ball& ball) { // Pass Ball by reference
-        if (ball.x + ball.radius >= GetScreenWidth()) {
+        if (ball.x + ball.radius + 30 >= GetScreenWidth()) {
             userScore += 1;
             ResetBall(ball);
         }
-        else if (ball.x - ball.radius <= 0) {
+        else if (ball.x - ball.radius - 30 <= 0) {
             opponentScore += 1;
             ResetBall(ball);
         }
@@ -24,6 +24,9 @@ public:
         
         // Opponent score on the right side in red
         DrawText(TextFormat("Opponent: %d", opponentScore), GetScreenWidth() - 250, 20, 30, RED);
+
+        //draw middle line
+        DrawLine(GetScreenWidth()/2 , 0 , GetScreenWidth() / 2 , GetScreenHeight() , YELLOW);
     }
 
 
