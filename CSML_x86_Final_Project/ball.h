@@ -1,7 +1,9 @@
 #include <raylib.h>
 #include <math.h> 
-
 #pragma once
+extern "C" void linear_motion(float* x, float* speed_x, float* y, float* speed_y);
+extern "C" void sinus_motion(float* time, float* x, float* speed_x, float* y, float* speed_y);
+
 class Ball {
 public:
     float x, y;
@@ -40,6 +42,7 @@ public:
 
     void Update() {
         BallStart();
+        
 
         switch (ballSpeedMode) {
             case 0:
@@ -54,12 +57,28 @@ public:
                 y += sinf(time * 2.0f) * speed_y; // Oscillate y position using sine wave
                 break;
             case 2:
-                // Quadratic curve motion
-                time += GetFrameTime(); // Increment time based on frame time
-                time = fminf(time, 10.0f); // Clamp time to a maximum value (e.g., 10 seconds)
+                // Quadratic curve motion for smooth bouncing
                 x += speed_x;
-                y += speed_y * time * time * 0.1f; // Quadratic curve for y position
+
+                // Keep the parabolic factor stable for smoother motion
+                y += speed_y;
+
+                // Gravity effect for parabolic trajectory
+                speed_y += 0.05f; // Gravity constant
+
+
+                if (y - radius <= 0) {
+                    y = radius;
+                    speed_y *= -1;
+                }
+
+                if (x + radius >= GetScreenWidth() || x - radius <= 0) {
+                    speed_x *= -1;
+                    x = fmaxf(radius, fminf(x, GetScreenWidth() - radius)); // Clamp within bounds
+                }
+
                 break;
+
             default:
                 break;
         }
@@ -86,9 +105,11 @@ public:
         {
             if (IsKeyPressed(KEY_Z)) {
                 ballSpeedMode = 1;
-            } else if (IsKeyPressed(KEY_X)) {
+            } 
+            else if (IsKeyPressed(KEY_X)) {
                 ballSpeedMode = 2;
-            } else if (IsKeyPressed(KEY_C)) {
+            } 
+            else if (IsKeyPressed(KEY_C)) {
                 ballSpeedMode = 0;
             }
 
