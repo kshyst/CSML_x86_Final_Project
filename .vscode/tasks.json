@@ -1,30 +1,48 @@
 {
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}", // Active file (e.g., test.cpp)
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}", // Output executable
-                "-I",
-                ".",
-                "-lraylib", // Link Raylib
-                "-lGL", // Link OpenGL
-                "-lm", // Link math library
-                "-lpthread", // Link pthread
-                "-ldl" // Link dynamic linking library
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Generated task by VS Code"
-        }
+      {
+        "label": "build",
+        "type": "shell",
+        "command": "g++",
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "-no-pie",
+          "${file}",
+          "${fileDirname}/asm/linear_motion.o",
+          "${fileDirname}/asm/sinus_motion.o",
+          "-o",
+          "${fileDirname}/${fileBasenameNoExtension}",
+          "-lraylib",
+          "-lGL",
+          "-lm",
+          "-lpthread",
+          "-ldl"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": ["$gcc"],
+        "detail": "Generated task by VS Code"
+      },
+      {
+        "label": "assemble",
+        "type": "shell",
+        "command": "as",
+        "args": [
+          "${file}",
+          "-o",
+          "${fileDirname}/${fileBasenameNoExtension}.o"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": false
+        },
+        "problemMatcher": ["$gcc"],
+        "detail": "Assembly compilation task"
+      }
     ]
-}
+  }
+  
