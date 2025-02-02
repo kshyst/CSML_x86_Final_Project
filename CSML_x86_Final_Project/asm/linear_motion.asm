@@ -2,15 +2,8 @@ section .note.GNU-stack noalloc noexec nowrite progbits
 
 section .text
     global linear_motion
-
-; Function prototype:
-; void linear_motion(float* x, float* speed_x, float* y, float* speed_y);
-
+    
 linear_motion:
-    ; Load addresses of x, speed_x, y, and speed_y into registers
-    ; x is in rdi, speed_x is in rsi, y is in rdx, speed_y is in rcx
-    ; (This follows the System V AMD64 ABI calling convention)
-
     ; Load x and speed_x into xmm0 and xmm1
     movss xmm0, [rdi]    ; xmm0 = *x (load value pointed to by rdi)
     movss xmm1, [rsi]    ; xmm1 = *speed_x (load value pointed to by rsi)
