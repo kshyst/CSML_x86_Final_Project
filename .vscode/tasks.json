@@ -12,6 +12,8 @@
           "${file}",
           "${fileDirname}/asm/linear_motion.o",
           "${fileDirname}/asm/sinus_motion.o",
+          "${fileDirname}/asm/adder.o",
+          "${fileDirname}/asm/boundary_check.o",
           "-o",
           "${fileDirname}/${fileBasenameNoExtension}",
           "-lraylib",
