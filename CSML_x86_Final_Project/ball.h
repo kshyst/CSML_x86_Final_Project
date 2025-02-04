@@ -3,6 +3,8 @@
 #pragma once
 extern "C" void linear_motion(float* x, float* speed_x, float* y, float* speed_y);
 extern "C" void sinus_motion(float* time, float* x, float* speed_x, float* y, float* speed_y);
+extern "C" void adder(float* variable, float constant);
+extern "C" void boundary_check(float* y, float* radius, float* speed_y);
 
 class Ball {
 public:
@@ -46,14 +48,11 @@ public:
                 sinus_motion(&time, &x, &speed_x, &y, &speed_y);
                 break;
             case 2:
-                x += speed_x;
-                y += speed_y;
-                speed_y += 0.05f;
+                linear_motion(&x, &speed_x, &y, &speed_y);
+                adder(&speed_y , 0.05f);
 
-                if (y - radius <= 0) {
-                    y = radius;
-                    speed_y *= -1;
-                }
+                boundary_check(&y, &radius, &speed_y);
+                
                 if (x + radius >= GetScreenWidth() || x - radius <= 0) {
                     speed_x *= -1;
                     x = fmaxf(radius, fminf(x, GetScreenWidth() - radius));

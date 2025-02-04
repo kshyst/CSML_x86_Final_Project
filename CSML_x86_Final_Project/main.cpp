@@ -15,7 +15,7 @@ int main() {
     const int screen_height = 720;
     const int target_fps = 144;
 
-    InitWindow(screen_width , screen_height , "My Pong Game");
+    InitWindow(screen_width , screen_height , "Kiarash's Project");
     SetTargetFPS(target_fps);
 
     ball.SetBall(screen_width / 2 - 300 , screen_height / 2 , 0 , 0 , 20);
@@ -31,9 +31,6 @@ int main() {
         player.Update();
         cpu.Update(ball.y);
         score.Update(ball);
-
-        std::cout << ball.y << "\n";
-        std::cout << ball.x << "\n";
 
         //Check for collisions
         if(CheckCollisionCircleRec(Vector2{ball.x , ball.y} , ball.radius , Rectangle{player.x , player.y , player.width , player.height})){
