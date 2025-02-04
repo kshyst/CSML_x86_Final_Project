@@ -32,6 +32,9 @@ int main() {
         cpu.Update(ball.y);
         score.Update(ball);
 
+        std::cout << ball.y << "\n";
+        std::cout << ball.x << "\n";
+
         //Check for collisions
         if(CheckCollisionCircleRec(Vector2{ball.x , ball.y} , ball.radius , Rectangle{player.x , player.y , player.width , player.height})){
             ball.speed_x *= -1;

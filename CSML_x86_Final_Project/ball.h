@@ -41,9 +41,9 @@ public:
                 linear_motion(&x, &speed_x, &y, &speed_y);
                 break;
             case 1:
+                // Sinus motion with assembly
                 time += GetFrameTime();
-                x += speed_x;
-                y += sinf(time * 2.0f) * speed_y;
+                sinus_motion(&time, &x, &speed_x, &y, &speed_y);
                 break;
             case 2:
                 x += speed_x;

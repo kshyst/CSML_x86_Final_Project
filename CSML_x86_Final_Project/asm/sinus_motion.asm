@@ -1,49 +1,49 @@
+section .data
+    two_float dd 2.0            ; Constant 2.0f for time scaling
+
 section .text
     global sinus_motion
-    extern sinf
-
 sinus_motion:
-    ; Parameters:
-    ; rdi = time (pointer)
-    ; rsi = x (pointer)
-    ; rdx = speed_x (pointer)
-    ; rcx = y (pointer)
-    ; r8  = speed_y (pointer)
-
+    ; sinus_motion(float* time, float* x, float* speed_x, float* y, float* speed_y)
     push rbp
-    mov rbp, rsp        ; Set up base pointer
-    and rsp, -16        ; Align stack to 16 bytes
+    mov rbp, rsp
+    sub rsp, 16                 ; Reserve space for local variables
 
-    ; Step 1: x += speed_x
-    movss xmm0, [rsi]    ; Load *x into xmm0
-    movss xmm1, [rdx]    ; Load *speed_x into xmm1
-    addss xmm0, xmm1     ; xmm0 = *x + *speed_x
-    movss [rsi], xmm0    ; Store result back to *x
+    ; Load pointers into registers
+    mov rdi, rdi                ; time
+    mov rsi, rsi                ; x
+    mov rdx, rdx                ; speed_x
+    mov rcx, rcx                ; y
+    mov r8, r8                  ; speed_y
 
-    ; Step 2: Calculate sinf(time * 2.0f) * speed_y
-    movss xmm0, [rdi]    ; Load *time into xmm0
-    movss xmm1, [rel two] ; Load constant 2.0 into xmm1
-    mulss xmm0, xmm1     ; xmm0 = *time * 2.0
+    ; Update x = *x + *speed_x
+    movss xmm0, dword [rsi]     ; Load *x
+    movss xmm1, dword [rdx]     ; Load *speed_x
+    addss xmm0, xmm1            ; *x += *speed_x
+    movss dword [rsi], xmm0     ; Store result back to *x
 
-    ; Call sinf
-    sub rsp, 8           ; Reserve space for stack alignment
-    call sinf            ; Result in xmm0
-    add rsp, 8           ; Restore stack
+    ; Compute sin(time * 2.0f)
+    movss xmm2, dword [rdi]     ; Load *time
+    mulss xmm2, dword [rel two_float] ; time * 2.0f
+    movss dword [rsp], xmm2     ; Store for FPU operation
 
-    ; Multiply sinf result by *speed_y
-    movss xmm1, [r8]     ; Load *speed_y into xmm1
-    mulss xmm0, xmm1     ; xmm0 = sinf(*time * 2.0) * *speed_y
+    ; Compute sine using FPU
+    fld dword [rsp]             ; Load time * 2.0f onto FPU stack
+    fsin                        ; Calculate sine
+    fstp dword [rsp]            ; Store sine result
+    movss xmm3, dword [rsp]     ; Load sine result into xmm3
 
-    ; Step 3: Add result to *y
-    movss xmm1, [rcx]    ; Load *y into xmm1
-    addss xmm1, xmm0     ; xmm1 = *y + sinf(*time * 2.0) * *speed_y
-    movss [rcx], xmm1    ; Store result back to *y
+    ; Multiply sine by speed_y
+    movss xmm4, dword [r8]      ; Load *speed_y
+    mulss xmm3, xmm4            ; sin(time * 2.0f) * *speed_y
 
-    mov rsp, rbp         ; Restore stack
-    pop rbp
+    ; Update y = *y + computed value
+    movss xmm5, dword [rcx]     ; Load *y
+    addss xmm5, xmm3            ; *y += sin(time * 2.0f) * *speed_y
+    movss dword [rcx], xmm5     ; Store result back to *y
+
+    add rsp, 16                 ; Restore stack
+    leave
     ret
 
-section .rodata
-two dd 2.0
-
-section .note.GNU-stack noalloc noexec nowrite progbits
+section .note.GNU-stack noexec
