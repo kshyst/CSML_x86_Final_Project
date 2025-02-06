@@ -37,6 +37,8 @@ public:
     void Update() {
         BallStart();
 
+        double startTime = GetTime(); // Start timing
+
         switch (ballSpeedMode) {
             case 0:
                 // Linear motion using assembly
@@ -61,6 +63,10 @@ public:
             default:
                 break;
         }
+
+        double endTime = GetTime(); // End timing
+        double deltaTime = (endTime - startTime) * 1000.0; // Convert to milliseconds
+        printf("Switch execution time: %.4f ms\n", deltaTime);
 
         if (y + radius >= GetScreenHeight() || y - radius <= 0) {
             speed_y *= -1;
